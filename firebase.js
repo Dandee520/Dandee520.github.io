@@ -1,3 +1,7 @@
+// Import Firebase modules
+import { initializeApp } from 'firebase/app';
+import { getDatabase, ref, push } from 'firebase/database';
+
 // Replace these values with your Firebase project's config
 const firebaseConfig = {
     apiKey: "AIzaSyDTF1KkR-hZ5HIWWxLw5YHMaRuPFdgbihA",
@@ -10,6 +14,29 @@ const firebaseConfig = {
     measurementId: "G-1LG7JRGT3P"
   };
   
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
+// Initialize Firebase
+const firebaseApp = initializeApp(firebaseConfig);
+
+// Get a reference to the database
+const db = getDatabase(firebaseApp);
+
+// Function to send a message
+function sendMessage() {
+  const message = messageInput.value;
+  if (message.trim() !== '') {
+    const messageRef = ref(db, 'messages');
+    push(messageRef, {
+      text: message,
+      timestamp: firebase.database.ServerValue.TIMESTAMP
+    });
+    messageInput.value = '';
+  }
+}
+
+// Function to display messages
+function displayMessage(snapshot) {
+  const message = snapshot.val();
+  const messageElement = document.createElement('div');
+  messageElement.innerText = message.text;
+  chatMessages.appendChild(messageElement);
+}
