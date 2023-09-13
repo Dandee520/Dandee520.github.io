@@ -19,24 +19,3 @@ const firebaseApp = initializeApp(firebaseConfig);
 
 // Get a reference to the database
 const db = getDatabase(firebaseApp);
-
-// Function to send a message
-function sendMessage() {
-  const message = messageInput.value;
-  if (message.trim() !== '') {
-    const messageRef = ref(db, 'messages');
-    push(messageRef, {
-      text: message,
-      timestamp: firebase.database.ServerValue.TIMESTAMP
-    });
-    messageInput.value = '';
-  }
-}
-
-// Function to display messages
-function displayMessage(snapshot) {
-  const message = snapshot.val();
-  const messageElement = document.createElement('div');
-  messageElement.innerText = message.text;
-  chatMessages.appendChild(messageElement);
-}
